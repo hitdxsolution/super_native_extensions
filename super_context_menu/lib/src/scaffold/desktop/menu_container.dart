@@ -91,7 +91,7 @@ class _MenuContainerState extends State<MenuContainer> implements MenuWidgetDele
     super.didChangeDependencies();
     if (_menuEntries.isEmpty) {
       final renderObject = context.findAncestorRenderObjectOfType<RenderBox>()!;
-      final localPosition = renderObject.globalToLocal(Offset(widget.rootMenuPosition.dx + 10, widget.rootMenuPosition.dy));
+      final localPosition = renderObject.globalToLocal(widget.rootMenuPosition);
       final directionality = Directionality.of(context);
       _menuEntries.add(_MenuEntry(
         focusMode: MenuWidgetFocusMode.menu,
@@ -303,9 +303,12 @@ class _MenuContainerState extends State<MenuContainer> implements MenuWidgetDele
     final renderBox = context.findRenderObject() as RenderBox;
     final directionality = getDirectionalityForMenu(parent);
     final transform = renderBox.getTransformTo(_menuLayoutKey.currentContext!.findRenderObject());
+
+    const double subMenuGap = 4;
+
     if (directionality == TextDirection.ltr) {
-      final primaryPosition = MatrixUtils.transformPoint(transform, Offset(renderBox.size.width, 0));
-      final secondaryPosition = MatrixUtils.transformPoint(transform, Offset.zero);
+      final primaryPosition = MatrixUtils.transformPoint(transform, Offset(renderBox.size.width + subMenuGap, 0));
+      final secondaryPosition = MatrixUtils.transformPoint(transform, const Offset(-subMenuGap, 0));
       _menuEntries.add(_MenuEntry(
         menu: menu,
         primaryPosition: primaryPosition,
@@ -315,8 +318,8 @@ class _MenuContainerState extends State<MenuContainer> implements MenuWidgetDele
         focusMode: focusMode,
       ));
     } else {
-      final primaryPosition = MatrixUtils.transformPoint(transform, Offset.zero);
-      final secondaryPosition = MatrixUtils.transformPoint(transform, Offset(renderBox.size.width, 0));
+      final primaryPosition = MatrixUtils.transformPoint(transform, const Offset(-subMenuGap, 0));
+      final secondaryPosition = MatrixUtils.transformPoint(transform, Offset(renderBox.size.width + subMenuGap, 0));
       _menuEntries.add(_MenuEntry(
         menu: menu,
         primaryPosition: primaryPosition,
