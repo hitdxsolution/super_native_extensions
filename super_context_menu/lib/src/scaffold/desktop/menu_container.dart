@@ -304,7 +304,7 @@ class _MenuContainerState extends State<MenuContainer> implements MenuWidgetDele
     final directionality = getDirectionalityForMenu(parent);
     final transform = renderBox.getTransformTo(_menuLayoutKey.currentContext!.findRenderObject());
 
-    const double subMenuGap = 4;
+    const double subMenuGap = 2;
 
     if (directionality == TextDirection.ltr) {
       final primaryPosition = MatrixUtils.transformPoint(transform, Offset(renderBox.size.width + subMenuGap, 0));
