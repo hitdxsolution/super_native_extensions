@@ -63,8 +63,7 @@ class _MenuEntry {
   });
 }
 
-class _MenuContainerState extends State<MenuContainer>
-    implements MenuWidgetDelegate {
+class _MenuContainerState extends State<MenuContainer> implements MenuWidgetDelegate {
   @override
   void initState() {
     super.initState();
@@ -92,19 +91,15 @@ class _MenuContainerState extends State<MenuContainer>
     super.didChangeDependencies();
     if (_menuEntries.isEmpty) {
       final renderObject = context.findAncestorRenderObjectOfType<RenderBox>()!;
-      final localPosition = renderObject.globalToLocal(widget.rootMenuPosition);
+      final localPosition = renderObject.globalToLocal(Offset(widget.rootMenuPosition.dx + 10, widget.rootMenuPosition.dy));
       final directionality = Directionality.of(context);
       _menuEntries.add(_MenuEntry(
         focusMode: MenuWidgetFocusMode.menu,
         menu: widget.rootMenu,
         primaryPosition: localPosition,
-        primaryEdge: directionality == TextDirection.ltr
-            ? MenuLayoutEdge.left
-            : MenuLayoutEdge.right,
+        primaryEdge: directionality == TextDirection.ltr ? MenuLayoutEdge.left : MenuLayoutEdge.right,
         secondaryPosition: localPosition,
-        secondaryEdge: directionality == TextDirection.ltr
-            ? MenuLayoutEdge.right
-            : MenuLayoutEdge.left,
+        secondaryEdge: directionality == TextDirection.ltr ? MenuLayoutEdge.right : MenuLayoutEdge.left,
       ));
     }
   }
@@ -218,8 +213,7 @@ class _MenuContainerState extends State<MenuContainer>
     if (_hideAnimation != null) {
       return;
     }
-    _hideAnimation =
-        SimpleAnimation.animate(const Duration(milliseconds: 200), (value) {
+    _hideAnimation = SimpleAnimation.animate(const Duration(milliseconds: 200), (value) {
       setState(() {
         _hideFactor = value;
       });
@@ -260,14 +254,8 @@ class _MenuContainerState extends State<MenuContainer>
     } else if (index == 0) {
       return Directionality.of(context);
     } else {
-      final renderObject = _menuEntries[index]
-          .menuWidgetKey
-          .currentContext!
-          .findRenderObject() as RenderBox;
-      final parentRenderObject = _menuEntries[index - 1]
-          .menuWidgetKey
-          .currentContext!
-          .findRenderObject() as RenderBox;
+      final renderObject = _menuEntries[index].menuWidgetKey.currentContext!.findRenderObject() as RenderBox;
+      final parentRenderObject = _menuEntries[index - 1].menuWidgetKey.currentContext!.findRenderObject() as RenderBox;
 
       final position = renderObject.localToGlobal(Offset.zero);
       final parentPosition = parentRenderObject.localToGlobal(Offset.zero);
@@ -283,8 +271,7 @@ class _MenuContainerState extends State<MenuContainer>
   RenderBox? getMenuRenderBox(Menu menu) {
     final entry = _menuEntries.firstWhereOrNull((e) => e.menu == menu);
     if (entry != null) {
-      final renderObject =
-          entry.menuWidgetKey.currentContext?.findRenderObject();
+      final renderObject = entry.menuWidgetKey.currentContext?.findRenderObject();
       if (renderObject is RenderBox) {
         return renderObject;
       }
@@ -301,8 +288,7 @@ class _MenuContainerState extends State<MenuContainer>
   }) {
     if (_menuEntries.last.menu == menu) {
       final entry = _menuEntries.last;
-      if (focusMode != MenuWidgetFocusMode.none &&
-          !entry.menuWidgetKey.currentState!.hasFocus()) {
+      if (focusMode != MenuWidgetFocusMode.none && !entry.menuWidgetKey.currentState!.hasFocus()) {
         if (focusMode == MenuWidgetFocusMode.menu) {
           entry.menuWidgetKey.currentState!.focusMenu();
         } else {
@@ -316,13 +302,10 @@ class _MenuContainerState extends State<MenuContainer>
     }
     final renderBox = context.findRenderObject() as RenderBox;
     final directionality = getDirectionalityForMenu(parent);
-    final transform = renderBox
-        .getTransformTo(_menuLayoutKey.currentContext!.findRenderObject());
+    final transform = renderBox.getTransformTo(_menuLayoutKey.currentContext!.findRenderObject());
     if (directionality == TextDirection.ltr) {
-      final primaryPosition = MatrixUtils.transformPoint(
-          transform, Offset(renderBox.size.width, 0));
-      final secondaryPosition =
-          MatrixUtils.transformPoint(transform, Offset.zero);
+      final primaryPosition = MatrixUtils.transformPoint(transform, Offset(renderBox.size.width, 0));
+      final secondaryPosition = MatrixUtils.transformPoint(transform, Offset.zero);
       _menuEntries.add(_MenuEntry(
         menu: menu,
         primaryPosition: primaryPosition,
@@ -332,10 +315,8 @@ class _MenuContainerState extends State<MenuContainer>
         focusMode: focusMode,
       ));
     } else {
-      final primaryPosition =
-          MatrixUtils.transformPoint(transform, Offset.zero);
-      final secondaryPosition = MatrixUtils.transformPoint(
-          transform, Offset(renderBox.size.width, 0));
+      final primaryPosition = MatrixUtils.transformPoint(transform, Offset.zero);
+      final secondaryPosition = MatrixUtils.transformPoint(transform, Offset(renderBox.size.width, 0));
       _menuEntries.add(_MenuEntry(
         menu: menu,
         primaryPosition: primaryPosition,
@@ -367,8 +348,7 @@ class _MenuSafeTriangleHitTestWidget extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context,
-      covariant _RenderMenuSafeaTriangleWidget renderObject) {
+  void updateRenderObject(BuildContext context, covariant _RenderMenuSafeaTriangleWidget renderObject) {
     renderObject.menuStateProvider = menuStateProvider;
   }
 }
@@ -393,17 +373,11 @@ class _RenderMenuSafeaTriangleWidget extends RenderProxyBox {
 
   _OpenedSubmenuPosition? _openedSubmenuPosition;
 
-  static bool _offsetWithinTriangle(
-      Offset offset, Offset a, Offset b, Offset c) {
+  static bool _offsetWithinTriangle(Offset offset, Offset a, Offset b, Offset c) {
     // barycentric coordinate method
-    double denominator =
-        ((b.dy - c.dy) * (a.dx - c.dx) + (c.dx - b.dx) * (a.dy - c.dy));
-    double bA = ((b.dy - c.dy) * (offset.dx - c.dx) +
-            (c.dx - b.dx) * (offset.dy - c.dy)) /
-        denominator;
-    double bB = ((c.dy - a.dy) * (offset.dx - c.dx) +
-            (a.dx - c.dx) * (offset.dy - c.dy)) /
-        denominator;
+    double denominator = ((b.dy - c.dy) * (a.dx - c.dx) + (c.dx - b.dx) * (a.dy - c.dy));
+    double bA = ((b.dy - c.dy) * (offset.dx - c.dx) + (c.dx - b.dx) * (offset.dy - c.dy)) / denominator;
+    double bB = ((c.dy - a.dy) * (offset.dx - c.dx) + (a.dx - c.dx) * (offset.dy - c.dy)) / denominator;
     double bC = 1 - bA - bB;
     return bA >= 0 && bB >= 0 && bC >= 0;
   }
@@ -414,8 +388,7 @@ class _RenderMenuSafeaTriangleWidget extends RenderProxyBox {
     final transformTheirs = menuBox.getTransformTo(parent as RenderObject);
     offset = MatrixUtils.transformPoint(transformOurs, offset);
     a = MatrixUtils.transformPoint(transformOurs, a);
-    final menuRect =
-        MatrixUtils.transformRect(transformTheirs, Offset.zero & menuBox.size);
+    final menuRect = MatrixUtils.transformRect(transformTheirs, Offset.zero & menuBox.size);
 
     // determine menu edge coordinate
     double menuX;
@@ -483,8 +456,7 @@ class _RenderMenuSafeaTriangleWidget extends RenderProxyBox {
     if (openedSubmenuPositon != null) {
       // if offset is within safe area reuse last position recorded while over
       // selected item
-      if (_offsetInSafeArea(position, openedSubmenuPositon.position,
-          openedSubmenuPositon.submenuRenderBox)) {
+      if (_offsetInSafeArea(position, openedSubmenuPositon.position, openedSubmenuPositon.submenuRenderBox)) {
         position = openedSubmenuPositon.position;
       }
     }
