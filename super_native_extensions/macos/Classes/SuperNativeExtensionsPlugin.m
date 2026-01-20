@@ -2,7 +2,7 @@
 
 extern void super_native_extensions_init(void);
 
-@implementation SuperNativeExtensionsPlugin
+@implementation ForkSuperNativeExtensionsPlugin
 
 + (void)initialize {
   super_native_extensions_init();

@@ -47,7 +47,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.superlist.super_native_extensions
+        package: com.superlist.fork_super_native_extensions
         pluginClass: ForkSuperNativeExtensionsPlugin
       ios:
         pluginClass: ForkSuperNativeExtensionsPlugin

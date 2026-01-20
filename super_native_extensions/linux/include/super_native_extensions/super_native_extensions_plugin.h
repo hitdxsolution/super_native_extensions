@@ -11,14 +11,14 @@ G_BEGIN_DECLS
 #define FLUTTER_PLUGIN_EXPORT
 #endif
 
-typedef struct _SuperNativeExtensionsPlugin SuperNativeExtensionsPlugin;
+typedef struct _ForkSuperNativeExtensionsPlugin ForkSuperNativeExtensionsPlugin;
 typedef struct {
   GObjectClass parent_class;
-} SuperNativeExtensionsPluginClass;
+} ForkSuperNativeExtensionsPluginClass;
 
-FLUTTER_PLUGIN_EXPORT GType super_native_extensions_plugin_get_type();
+FLUTTER_PLUGIN_EXPORT GType fork_super_native_extensions_plugin_get_type();
 
-FLUTTER_PLUGIN_EXPORT void super_native_extensions_plugin_register_with_registrar(
+FLUTTER_PLUGIN_EXPORT void fork_super_native_extensions_plugin_register_with_registrar(
     FlPluginRegistrar* registrar);
 
 G_END_DECLS

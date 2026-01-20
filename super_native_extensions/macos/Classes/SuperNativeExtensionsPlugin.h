@@ -1,4 +1,4 @@
 #import <FlutterMacOS/FlutterMacOS.h>
 
-@interface SuperNativeExtensionsPlugin : NSObject<FlutterPlugin>
+@interface ForkSuperNativeExtensionsPlugin : NSObject<FlutterPlugin>
 @end

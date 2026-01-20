@@ -4,9 +4,9 @@
 
 #include "super_native_extensions_plugin.h"
 
-void SuperNativeExtensionsPluginCApiRegisterWithRegistrar(
+void ForkSuperNativeExtensionsPluginCApiRegisterWithRegistrar(
     FlutterDesktopPluginRegistrarRef registrar) {
-  super_native_extensions::SuperNativeExtensionsPlugin::RegisterWithRegistrar(
+  fork_super_native_extensions::ForkSuperNativeExtensionsPlugin::RegisterWithRegistrar(
       flutter::PluginRegistrarManager::GetInstance()
           ->GetRegistrar<flutter::PluginRegistrarWindows>(registrar));
 }

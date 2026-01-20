@@ -1,4 +1,4 @@
-package com.superlist.super_native_extensions;
+package com.superlist.fork_super_native_extensions;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

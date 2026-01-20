@@ -1,4 +1,4 @@
-package com.superlist.super_native_extensions;
+package com.superlist.fork_super_native_extensions;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
 /**
- * SuperNativeExtensionsPlugin
+ * ForkSuperNativeExtensionsPlugin
  */
-public class SuperNativeExtensionsPlugin implements FlutterPlugin {
+public class ForkSuperNativeExtensionsPlugin implements FlutterPlugin {
 
     static final ClipDataHelper ClipDataHelper = new ClipDataHelper();
     static final DragDropHelper DragDropHelper = new DragDropHelper();

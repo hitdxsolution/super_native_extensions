@@ -10,7 +10,7 @@ extern bool super_native_extensions_text_input_plugin_select_all(void);
 
 static void swizzleTextInputPlugin();
 
-@implementation SuperNativeExtensionsPlugin
+@implementation ForkSuperNativeExtensionsPlugin
 
 + (void)initialize {
   super_native_extensions_init();

@@ -14,10 +14,10 @@ extern "C" {
 extern void super_native_extensions_init(void);
 }
 
-namespace super_native_extensions {
+namespace fork_super_native_extensions {
 
 // static
-void SuperNativeExtensionsPlugin::RegisterWithRegistrar(
+void ForkSuperNativeExtensionsPlugin::RegisterWithRegistrar(
     flutter::PluginRegistrarWindows *registrar) {
 
   static bool initialized = false;
@@ -26,13 +26,13 @@ void SuperNativeExtensionsPlugin::RegisterWithRegistrar(
     initialized = true;
   }
 
-  auto plugin = std::make_unique<SuperNativeExtensionsPlugin>();
+  auto plugin = std::make_unique<ForkSuperNativeExtensionsPlugin>();
 
   registrar->AddPlugin(std::move(plugin));
 }
 
-SuperNativeExtensionsPlugin::SuperNativeExtensionsPlugin() {}
+ForkSuperNativeExtensionsPlugin::ForkSuperNativeExtensionsPlugin() {}
 
-SuperNativeExtensionsPlugin::~SuperNativeExtensionsPlugin() {}
+ForkSuperNativeExtensionsPlugin::~ForkSuperNativeExtensionsPlugin() {}
 
-} // namespace super_native_extensions
+} // namespace fork_super_native_extensions

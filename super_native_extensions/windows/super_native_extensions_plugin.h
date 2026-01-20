@@ -6,24 +6,24 @@
 
 #include <memory>
 
-namespace super_native_extensions {
+namespace fork_super_native_extensions {
 
-class SuperNativeExtensionsPlugin : public flutter::Plugin {
+class ForkSuperNativeExtensionsPlugin : public flutter::Plugin {
 public:
   static void RegisterWithRegistrar(flutter::PluginRegistrarWindows *registrar);
 
-  SuperNativeExtensionsPlugin();
+  ForkSuperNativeExtensionsPlugin();
 
-  virtual ~SuperNativeExtensionsPlugin();
+  virtual ~ForkSuperNativeExtensionsPlugin();
 
   // Disallow copy and assign.
-  SuperNativeExtensionsPlugin(const SuperNativeExtensionsPlugin &) = delete;
-  SuperNativeExtensionsPlugin &
-  operator=(const SuperNativeExtensionsPlugin &) = delete;
+  ForkSuperNativeExtensionsPlugin(const ForkSuperNativeExtensionsPlugin &) = delete;
+  ForkSuperNativeExtensionsPlugin &
+  operator=(const ForkSuperNativeExtensionsPlugin &) = delete;
 
 private:
 };
 
-} // namespace super_native_extensions
+} // namespace fork_super_native_extensions
 
 #endif // FLUTTER_PLUGIN_SUPER_NATIVE_EXTENSIONS_PLUGIN_H_
