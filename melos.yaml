@@ -12,3 +12,10 @@ packages:
   - super_keyboard_layout/example
   - super_native_extensions
   - super_native_extensions/cargokit/build_tool
+
+dependency_overrides:
+  super_native_extensions:
+    git:
+      url: https://github.com/hitdxsolution/super_native_extensions.git
+      path: super_native_extensions
+      ref: wedding-pro-3.16
