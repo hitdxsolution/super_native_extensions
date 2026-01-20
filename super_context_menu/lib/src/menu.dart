@@ -37,8 +37,7 @@ class MenuRequest {
 
 typedef MenuProvider = FutureOr<Menu?> Function(MenuRequest request);
 
-typedef MenuConfigurationProvider = Future<MobileMenuConfiguration?> Function(
-    MobileMenuConfigurationRequest request);
+typedef MenuConfigurationProvider = Future<MobileMenuConfiguration?> Function(MobileMenuConfigurationRequest request);
 
 class DeferredMenuPreview {
   DeferredMenuPreview(this.size, this.widget);
@@ -64,17 +63,14 @@ class ContextMenuWidget extends StatelessWidget {
     MobileMenuWidgetBuilder? mobileMenuWidgetBuilder,
     DesktopMenuWidgetBuilder? desktopMenuWidgetBuilder,
     this.writingToolsConfigurationProvider,
-  })  : assert(previewBuilder == null || deferredPreviewBuilder == null,
-            'Cannot use both previewBuilder and deferredPreviewBuilder'),
-        mobileMenuWidgetBuilder =
-            mobileMenuWidgetBuilder ?? DefaultMobileMenuWidgetBuilder.instance,
-        desktopMenuWidgetBuilder =
-            desktopMenuWidgetBuilder ?? DefaultDesktopMenuWidgetBuilder();
+    this.onDispose,
+  })  : assert(previewBuilder == null || deferredPreviewBuilder == null, 'Cannot use both previewBuilder and deferredPreviewBuilder'),
+        mobileMenuWidgetBuilder = mobileMenuWidgetBuilder ?? DefaultMobileMenuWidgetBuilder.instance,
+        desktopMenuWidgetBuilder = desktopMenuWidgetBuilder ?? DefaultDesktopMenuWidgetBuilder();
 
   final Widget Function(BuildContext context, Widget child)? liftBuilder;
   final Widget Function(BuildContext context, Widget child)? previewBuilder;
-  final DeferredMenuPreview Function(BuildContext context, Widget child,
-      CancellationToken cancellationToken)? deferredPreviewBuilder;
+  final DeferredMenuPreview Function(BuildContext context, Widget child, CancellationToken cancellationToken)? deferredPreviewBuilder;
 
   final HitTestBehavior hitTestBehavior;
   final MenuProvider menuProvider;
@@ -82,8 +78,7 @@ class ContextMenuWidget extends StatelessWidget {
   final Widget child;
   final MobileMenuWidgetBuilder mobileMenuWidgetBuilder;
   final DesktopMenuWidgetBuilder desktopMenuWidgetBuilder;
-  final WritingToolsConfiguration? Function()?
-      writingToolsConfigurationProvider;
+  final WritingToolsConfiguration? Function()? writingToolsConfigurationProvider;
 
   /// Tap region group ids for which this context menu will be part of.
   /// Can be used to avoid losing input focus when user clicks on the menu.
@@ -92,6 +87,8 @@ class ContextMenuWidget extends StatelessWidget {
   /// Base icon theme for menu icons. The size will be overridden depending
   /// on platform.
   final IconThemeData? iconTheme;
+
+  final VoidCallback? onDispose;
 
   @override
   Widget build(BuildContext context) {
@@ -120,8 +117,8 @@ class ContextMenuWidget extends StatelessWidget {
             iconTheme: iconTheme,
             tapRegionGroupIds: tapRegionGroupIds,
             menuWidgetBuilder: desktopMenuWidgetBuilder,
-            writingToolsConfigurationProvider:
-                writingToolsConfigurationProvider,
+            writingToolsConfigurationProvider: writingToolsConfigurationProvider,
+            onDispose: onDispose,
             child: child!,
           );
         }

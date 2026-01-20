@@ -2,8 +2,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart'
-    show Colors, Icons, CircularProgressIndicator;
+import 'package:flutter/material.dart' show Colors, Icons, CircularProgressIndicator;
 import 'package:pixel_snap/widgets.dart';
 import 'package:super_context_menu/src/default_builder/group_intrinsic_width.dart';
 
@@ -41,8 +40,7 @@ class DefaultDesktopMenuTheme {
   final BoxDecoration decorationInner; // Inside of clip
   final Color separatorColor;
   final TextStyle Function(DesktopMenuItemInfo) textStyleForItem;
-  final TextStyle Function(DesktopMenuItemInfo, TextStyle)
-      textStyleForItemActivator;
+  final TextStyle Function(DesktopMenuItemInfo, TextStyle) textStyleForItemActivator;
   final BoxDecoration Function(DesktopMenuItemInfo) decorationForItem;
 
   DefaultDesktopMenuTheme({
@@ -184,8 +182,7 @@ class DefaultDesktopMenuWidgetBuilder extends DesktopMenuWidgetBuilder {
   final double maxWidth;
 
   static DefaultDesktopMenuTheme _themeForContext(BuildContext context) {
-    return DefaultDesktopMenuTheme.themeForBrightness(
-        MediaQuery.platformBrightnessOf(context));
+    return DefaultDesktopMenuTheme.themeForBrightness(MediaQuery.platformBrightnessOf(context));
   }
 
   @override
@@ -197,8 +194,7 @@ class DefaultDesktopMenuWidgetBuilder extends DesktopMenuWidgetBuilder {
     final pixelRatio = MediaQuery.of(context).devicePixelRatio;
     final theme = _themeForContext(context);
     return Container(
-      decoration: theme.decorationOuter.copyWith(
-          borderRadius: BorderRadius.circular(6.0 + 1.0 / pixelRatio)),
+      decoration: theme.decorationOuter.copyWith(borderRadius: BorderRadius.circular(6.0 + 1.0 / pixelRatio)),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
         child: Padding(
@@ -281,8 +277,7 @@ class DefaultDesktopMenuWidgetBuilder extends DesktopMenuWidgetBuilder {
       size: 16,
       color: textStyle.color,
     );
-    final stateIcon =
-        element is MenuAction ? _stateToIcon(element.state) : null;
+    final stateIcon = element is MenuAction ? _stateToIcon(element.state) : null;
     final Widget? prefix;
     if (stateIcon != null) {
       prefix = Icon(
@@ -378,6 +373,5 @@ class DefaultDesktopMenuWidgetBuilder extends DesktopMenuWidgetBuilder {
 }
 
 extension on DesktopMenuInfo {
-  bool get hasAnyCheckedItems => (resolvedChildren.any((element) =>
-      element is MenuAction && element.state != MenuActionState.none));
+  bool get hasAnyCheckedItems => (resolvedChildren.any((element) => element is MenuAction && element.state != MenuActionState.none));
 }

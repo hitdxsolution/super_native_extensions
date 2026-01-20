@@ -27,8 +27,7 @@ class _ContextMenuDetector extends StatefulWidget {
   final Widget child;
   final HitTestBehavior hitTestBehavior;
   final ContextMenuIsAllowed contextMenuIsAllowed;
-  final Future<void> Function(Offset, Listenable, Function(bool))
-      onShowContextMenu;
+  final Future<void> Function(Offset, Listenable, Function(bool)) onShowContextMenu;
 
   @override
   State<StatefulWidget> createState() => _ContextMenuDetectorState();
@@ -47,17 +46,14 @@ class _ContextMenuDetectorState extends State<_ContextMenuDetector> {
 
   bool _acceptPrimaryButton() {
     final keys = HardwareKeyboard.instance.logicalKeysPressed;
-    return defaultTargetPlatform == TargetPlatform.macOS &&
-        keys.length == 1 &&
-        keys.contains(LogicalKeyboardKey.controlLeft);
+    return defaultTargetPlatform == TargetPlatform.macOS && keys.length == 1 && keys.contains(LogicalKeyboardKey.controlLeft);
   }
 
   bool _canAcceptEvent(PointerDownEvent event) {
     if (event.kind != PointerDeviceKind.mouse) {
       return false;
     }
-    if (event.buttons == kSecondaryButton ||
-        event.buttons == kPrimaryButton && _acceptPrimaryButton()) {
+    if (event.buttons == kSecondaryButton || event.buttons == kPrimaryButton && _acceptPrimaryButton()) {
       return widget.contextMenuIsAllowed(event.position);
     }
 
@@ -146,6 +142,7 @@ class DesktopContextMenuWidget extends StatelessWidget {
     required this.tapRegionGroupIds,
     this.writingToolsConfigurationProvider,
     this.iconTheme,
+    this.onDispose,
   });
 
   final HitTestBehavior hitTestBehavior;
@@ -154,13 +151,13 @@ class DesktopContextMenuWidget extends StatelessWidget {
   final DesktopMenuWidgetBuilder menuWidgetBuilder;
   final Set<Object> tapRegionGroupIds;
   final Widget child;
+  final VoidCallback? onDispose;
 
   /// Base icon theme for menu icons. The size will be overridden depending
   /// on platform.
   final IconThemeData? iconTheme;
 
-  final WritingToolsConfiguration? Function()?
-      writingToolsConfigurationProvider;
+  final WritingToolsConfiguration? Function()? writingToolsConfigurationProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -174,6 +171,7 @@ class DesktopContextMenuWidget extends StatelessWidget {
           pointerUpListenable,
           onMenuResolved,
           tapRegionGroupIds,
+          onDispose,
         );
       },
       // Used on web to determine whether to prevent browser context menu
@@ -190,9 +188,7 @@ class DesktopContextMenuWidget extends StatelessWidget {
     final mq = MediaQuery.of(context);
     final iconTheme = this.iconTheme ??
         const IconThemeData.fallback().copyWith(
-          color: mq.platformBrightness == Brightness.light
-              ? const Color(0xFF090909)
-              : const Color(0xFFF0F0F0),
+          color: mq.platformBrightness == Brightness.light ? const Color(0xFF090909) : const Color(0xFFF0F0F0),
         );
     return raw.MenuSerializationOptions(
       iconTheme: iconTheme,
@@ -209,6 +205,7 @@ class DesktopContextMenuWidget extends StatelessWidget {
     Listenable onInitialPointerUp,
     Function(bool) onMenuResolved,
     Set<Object> tapRegionGroupIds,
+    VoidCallback? onDispose,
   ) async {
     final onShowMenu = SimpleNotifier();
     final onHideMenu = ValueNotifier<raw.MenuResult?>(null);
@@ -237,18 +234,15 @@ class DesktopContextMenuWidget extends StatelessWidget {
         }
         onMenuResolved(true);
         onShowMenu.notify();
-        final writingToolsConfiguration =
-            writingToolsConfigurationProvider?.call();
-        raw.writingToolsSuggestionCallback =
-            writingToolsConfiguration?.onSuggestion;
+        final writingToolsConfiguration = writingToolsConfigurationProvider?.call();
+        raw.writingToolsSuggestionCallback = writingToolsConfiguration?.onSuggestion;
 
         final request = raw.DesktopContextMenuRequest(
             iconTheme: serializationOptions.iconTheme,
             position: globalPosition,
             menu: handle,
             writingToolsConfiguration: switch (writingToolsConfiguration) {
-              (WritingToolsConfiguration c) =>
-                raw.WritingToolsConfiguration(rect: c.rect, text: c.text),
+              (WritingToolsConfiguration c) => raw.WritingToolsConfiguration(rect: c.rect, text: c.text),
               _ => null,
             },
             fallback: () {
@@ -258,7 +252,10 @@ class DesktopContextMenuWidget extends StatelessWidget {
                 iconTheme: serializationOptions.iconTheme,
                 menu: handle!.menu,
                 menuWidgetBuilder: menuWidgetBuilder,
-                onDone: (value) => completer.complete(value),
+                onDone: (value) {
+                  onDispose?.call();
+                  completer.complete(value);
+                },
                 onInitialPointerUp: onInitialPointerUp,
                 position: globalPosition,
                 tapRegionGroupIds: tapRegionGroupIds,
