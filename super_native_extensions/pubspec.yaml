@@ -48,15 +48,15 @@ flutter:
     platforms:
       android:
         package: com.superlist.super_native_extensions
-        pluginClass: SuperNativeExtensionsPlugin
+        pluginClass: ForkSuperNativeExtensionsPlugin
       ios:
-        pluginClass: SuperNativeExtensionsPlugin
+        pluginClass: ForkSuperNativeExtensionsPlugin
       linux:
-        pluginClass: SuperNativeExtensionsPlugin
+        pluginClass: ForkSuperNativeExtensionsPlugin
       macos:
-        pluginClass: SuperNativeExtensionsPlugin
+        pluginClass: ForkSuperNativeExtensionsPlugin
       windows:
-        pluginClass: SuperNativeExtensionsPluginCApi
+        pluginClass: ForkSuperNativeExtensionsPluginCApi
       web:
-        pluginClass: SuperNativeExtensionsWeb
-        fileName: super_native_extensions_web.dart
+        pluginClass: ForkSuperNativeExtensionsWeb
+        fileName: fork_super_native_extensions_web.dart
