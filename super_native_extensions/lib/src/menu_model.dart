@@ -24,13 +24,11 @@ abstract class MenuImage {
   /// Creates platform-specific image with given name.
   /// This currently works on iOS for SF symbol names
   /// (i.e. [UIImage systemImageNamed:]).
-  factory MenuImage.system(String systemImageName) =>
-      SystemMenuImage(systemImageName);
+  factory MenuImage.system(String systemImageName) => SystemMenuImage(systemImageName);
 
   /// Creates menu image from specified image provider function.
   factory MenuImage.withImage(
-    FutureOr<ui.Image?>? Function(IconThemeData theme, int devicePixelRatio)
-        imageProvider,
+    FutureOr<ui.Image?>? Function(IconThemeData theme, int devicePixelRatio) imageProvider,
   ) =>
       ImageProviderMenuImage(imageProvider);
 }
@@ -40,11 +38,15 @@ class MenuElement {
     this.title,
     this.subtitle,
     this.image,
+    this.titleStyle,
+    this.prefixIcon,
   }) : uniqueId = _nextId++;
 
   final String? title;
   final String? subtitle;
   final MenuImage? image;
+  final Widget? prefixIcon;
+  final TextStyle? titleStyle;
   final int uniqueId;
 
   MenuElement? find({required int uniqueId}) {
@@ -64,6 +66,8 @@ class Menu extends MenuElement {
   Menu({
     super.title,
     super.image,
+    super.titleStyle,
+    super.prefixIcon,
     required this.children,
   });
 
@@ -120,6 +124,8 @@ class MenuAction extends MenuElement {
   MenuAction({
     super.title,
     super.image,
+    super.titleStyle,
+    super.prefixIcon,
     required this.callback,
     this.attributes = const MenuActionAttributes(),
     this.state = MenuActionState.none,
