@@ -47,5 +47,5 @@ flutter:
   plugin:
     platforms:
       web:
-        pluginClass: ForkSuperNativeExtensionsWeb
-        fileName: fork_super_native_extensions_web.dart
+        pluginClass: SuperNativeExtensionsWeb
+        fileName: super_native_extensions_web.dart
