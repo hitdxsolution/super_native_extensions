@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:super_native_extensions/raw_menu.dart' as raw;
-import 'package:super_native_extensions/widget_snapshot.dart';
+import 'package:fork_super_native_extensions/raw_menu.dart' as raw;
+import 'package:fork_super_native_extensions/widget_snapshot.dart';
 
 import 'menu.dart';
 import 'menu_internal.dart';
@@ -28,13 +28,11 @@ class MobileContextMenuWidget extends StatefulWidget {
     this.destructiveIconTheme,
     required this.contextMenuIsAllowed,
     required this.menuWidgetBuilder,
-  }) : assert(previewBuilder == null || deferredPreviewBuilder == null,
-            'Cannot use both previewBuilder and deferredPreviewBuilder');
+  }) : assert(previewBuilder == null || deferredPreviewBuilder == null, 'Cannot use both previewBuilder and deferredPreviewBuilder');
 
   final Widget Function(BuildContext context, Widget child)? liftBuilder;
   final Widget Function(BuildContext context, Widget child)? previewBuilder;
-  final DeferredMenuPreview Function(BuildContext context, Widget child,
-      CancellationToken cancellationToken)? deferredPreviewBuilder;
+  final DeferredMenuPreview Function(BuildContext context, Widget child, CancellationToken cancellationToken)? deferredPreviewBuilder;
 
   final HitTestBehavior hitTestBehavior;
   final MenuProvider menuProvider;
@@ -59,15 +57,11 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
     final mq = MediaQuery.of(context);
     final iconTheme = widget.iconTheme ??
         const IconThemeData.fallback().copyWith(
-          color: mq.platformBrightness == Brightness.light
-              ? const Color(0xFF090909)
-              : const Color(0xFFF0F0F0),
+          color: mq.platformBrightness == Brightness.light ? const Color(0xFF090909) : const Color(0xFFF0F0F0),
         );
     final destructiveIconTheme = widget.destructiveIconTheme ??
         iconTheme.copyWith(
-          color: mq.platformBrightness == Brightness.light
-              ? const Color(0xFFFF3B2F)
-              : const Color(0xFFFF453A),
+          color: mq.platformBrightness == Brightness.light ? const Color(0xFFFF3B2F) : const Color(0xFFFF453A),
         );
     return raw.MenuSerializationOptions(
       iconTheme: iconTheme,
@@ -76,8 +70,7 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
     );
   }
 
-  Future<MobileMenuConfiguration?> getMenuConfiguration(
-      MobileMenuConfigurationRequest request) async {
+  Future<MobileMenuConfiguration?> getMenuConfiguration(MobileMenuConfigurationRequest request) async {
     if (!widget.contextMenuIsAllowed(request.location)) {
       return null;
     }
@@ -104,8 +97,7 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
       return null;
     }
 
-    final liftImage = await snapshotter.getSnapshot(request.location, _keyLift,
-        () => widget.liftBuilder?.call(context, widget.child));
+    final liftImage = await snapshotter.getSnapshot(request.location, _keyLift, () => widget.liftBuilder?.call(context, widget.child));
 
     if (liftImage == null) {
       // might happen if the widget was removed from hierarchy.
@@ -114,10 +106,7 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
       return null;
     }
 
-    final previewImage = widget.previewBuilder != null
-        ? await snapshotter.getSnapshot(request.location, _keyPreview,
-            () => widget.previewBuilder!.call(context, widget.child))
-        : null;
+    final previewImage = widget.previewBuilder != null ? await snapshotter.getSnapshot(request.location, _keyPreview, () => widget.previewBuilder!.call(context, widget.child)) : null;
 
     final menuContext = await raw.MenuContext.instance();
 
@@ -151,9 +140,7 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
       onPreviewAction.notify,
     );
 
-    Size? deferredSize = widget.deferredPreviewBuilder != null
-        ? _getDeferredPreview(onHideMenu, request.previewImageSetter)
-        : null;
+    Size? deferredSize = widget.deferredPreviewBuilder != null ? _getDeferredPreview(onHideMenu, request.previewImageSetter) : null;
 
     return MobileMenuConfiguration(
       configurationId: request.configurationId,
@@ -162,15 +149,10 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
       previewSize: deferredSize,
       handle: handle,
       backgroundBuilder: (opacity) {
-        return Builder(
-            builder: (context) => widget.menuWidgetBuilder
-                .buildOverlayBackground(context, opacity));
+        return Builder(builder: (context) => widget.menuWidgetBuilder.buildOverlayBackground(context, opacity));
       },
       previewBuilder: (size, snapshot) {
-        return MenuPreviewWidget(
-            size: size,
-            menuWidgetBuilder: widget.menuWidgetBuilder,
-            image: snapshot);
+        return MenuPreviewWidget(size: size, menuWidgetBuilder: widget.menuWidgetBuilder, image: snapshot);
       },
       menuWidgetBuilder: (
         BuildContext context,
@@ -193,12 +175,10 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
     );
   }
 
-  Size _getDeferredPreview(
-      Listenable onHide, ValueSetter<WidgetSnapshot> imageSetter) {
+  Size _getDeferredPreview(Listenable onHide, ValueSetter<WidgetSnapshot> imageSetter) {
     final cancellationToken = raw.SimpleCancellationToken();
     onHide.addListener(cancellationToken.cancel);
-    final deferredPreview = widget.deferredPreviewBuilder!(
-        context, widget.child, cancellationToken);
+    final deferredPreview = widget.deferredPreviewBuilder!(context, widget.child, cancellationToken);
     deferredPreview.widget.then((widget) {
       if (!cancellationToken.cancelled) {
         cancellationToken.dispose();
@@ -211,8 +191,7 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
     return deferredPreview.size;
   }
 
-  void _updateMenuPreview(Widget preview, Size size,
-      ValueSetter<WidgetSnapshot> imageSetter) async {
+  void _updateMenuPreview(Widget preview, Size size, ValueSetter<WidgetSnapshot> imageSetter) async {
     final snapshotter = _snapshotterKey.currentState!;
     final child = SnapshotSettings(
       constraintsTransform: (_) => BoxConstraints.tight(size),
@@ -220,8 +199,7 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
     );
     final previewImage = await snapshotter.getSnapshot(
       Offset.zero,
-      _SnapshotKey(
-          'DeferredPreview'), // Deferred preview must have separate key.
+      _SnapshotKey('DeferredPreview'), // Deferred preview must have separate key.
       () => child,
     );
     if (previewImage != null) {
@@ -238,8 +216,7 @@ class _ContextMenuWidgetState extends State<MobileContextMenuWidget> {
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerDown: (_) {
-          if (defaultTargetPlatform == TargetPlatform.iOS ||
-              defaultTargetPlatform == TargetPlatform.android) {
+          if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
             {
               _snapshotterKey.currentState?.registerWidget(
                   _keyLift,
@@ -301,12 +278,10 @@ class _LongPressDetector extends StatelessWidget {
       return RawGestureDetector(
         behavior: hitTestBehavior,
         gestures: {
-          PanGestureRecognizer:
-              GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
+          PanGestureRecognizer: GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
             () => PanGestureRecognizer(),
             (recognizer) {
-              recognizer.gestureSettings =
-                  const DeviceGestureSettings(touchSlop: double.maxFinite);
+              recognizer.gestureSettings = const DeviceGestureSettings(touchSlop: double.maxFinite);
               recognizer.onDown = (_) {};
             },
           ),
@@ -318,13 +293,11 @@ class _LongPressDetector extends StatelessWidget {
         child: RawGestureDetector(
           behavior: hitTestBehavior,
           gestures: {
-            raw.SingleDragDelayedGestureRecognizer:
-                GestureRecognizerFactoryWithHandlers<
-                        raw.SingleDragDelayedGestureRecognizer>(
-                    () => raw.SingleDragDelayedGestureRecognizer(
-                          beginDuration: const Duration(milliseconds: 150),
-                          duration: const Duration(milliseconds: 300),
-                        ), (recognizer) {
+            raw.SingleDragDelayedGestureRecognizer: GestureRecognizerFactoryWithHandlers<raw.SingleDragDelayedGestureRecognizer>(
+                () => raw.SingleDragDelayedGestureRecognizer(
+                      beginDuration: const Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 300),
+                    ), (recognizer) {
               recognizer.shouldAcceptTouchAtPosition = contextMenuIsAllowed;
               recognizer.onDragStart = (globalPosition) {
                 return longPressHandler?.dragGestureForPosition(

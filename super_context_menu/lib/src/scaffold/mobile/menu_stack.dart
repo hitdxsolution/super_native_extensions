@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:super_context_menu/src/scaffold/common/deferred_menu_items.dart';
-import 'package:super_native_extensions/raw_menu.dart' as raw;
+import 'package:fork_super_native_extensions/raw_menu.dart' as raw;
 
 import '../../menu_model.dart';
 import 'menu_layout.dart';
@@ -64,8 +64,7 @@ class MenuStackState extends State<MenuStack> implements MenuWidgetDelegate {
 
   @override
   void pushMenu(BuildContext anchorItem, Menu menu) {
-    final existingRecord =
-        _beingRemoved.firstWhereOrNull((element) => element.menu == menu);
+    final existingRecord = _beingRemoved.firstWhereOrNull((element) => element.menu == menu);
     if (existingRecord != null) {
       setState(() {
         _beingRemoved.remove(existingRecord);
@@ -78,8 +77,7 @@ class MenuStackState extends State<MenuStack> implements MenuWidgetDelegate {
     final renderObject = anchorItem.findRenderObject() as RenderBox;
     final ourRenderObject = context.findRenderObject() as RenderBox;
     final matrix = renderObject.getTransformTo(ourRenderObject);
-    var sourceRect =
-        MatrixUtils.transformRect(matrix, renderObject.paintBounds);
+    var sourceRect = MatrixUtils.transformRect(matrix, renderObject.paintBounds);
 
     final record = _MenuRecord(
       menu: menu,
@@ -160,9 +158,7 @@ class MenuStackState extends State<MenuStack> implements MenuWidgetDelegate {
             destinationOffset: record.destinationOffset,
             transition: record.transition,
             duration: info.transitionDuration,
-            curve: record.transition == 1.0
-                ? Curves.easeOutCubic
-                : Curves.easeInOutCubic,
+            curve: record.transition == 1.0 ? Curves.easeOutCubic : Curves.easeInOutCubic,
             onTransitionedToZero: record.onTransitionedToZero,
             child: _MenuContainer(
               builder: widget.builder,
@@ -208,8 +204,7 @@ class _MenuContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final menuAlignment = this.menuAlignment.resolve(null);
-    final scaleAlignment =
-        menuAlignment.x < 0 ? Alignment.topLeft : Alignment.topRight;
+    final scaleAlignment = menuAlignment.x < 0 ? Alignment.topLeft : Alignment.topRight;
 
     return AnimatedScale(
       duration: info.transitionDuration,

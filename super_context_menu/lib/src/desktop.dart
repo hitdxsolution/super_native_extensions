@@ -7,10 +7,10 @@ import 'package:flutter/widgets.dart';
 
 import 'package:super_context_menu/src/menu_internal.dart';
 import 'package:super_context_menu/super_context_menu.dart';
-import 'package:super_native_extensions/raw_menu.dart' as raw;
+import 'package:fork_super_native_extensions/raw_menu.dart' as raw;
 
 // ignore: implementation_imports
-import 'package:super_native_extensions/src/mutex.dart';
+import 'package:fork_super_native_extensions/src/mutex.dart';
 
 import 'scaffold/desktop/menu_session.dart';
 import 'scaffold/desktop/menu_widget_builder.dart';

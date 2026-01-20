@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:super_native_extensions/raw_menu.dart' as raw;
+import 'package:fork_super_native_extensions/raw_menu.dart' as raw;
 
 import 'menu.dart';
 import 'menu_model.dart';
@@ -45,15 +45,13 @@ class MenuContextDelegate implements raw.MenuContextDelegate {
     return callbacks != null;
   }
 
-  bool registerOnHideCallback(
-      int configurationId, ValueSetter<MenuResult> callback) {
+  bool registerOnHideCallback(int configurationId, ValueSetter<MenuResult> callback) {
     final callbacks = _onHide[configurationId];
     callbacks?.add(callback);
     return callbacks != null;
   }
 
-  bool registerPreviewActionCallback(
-      int configurationId, VoidCallback callback) {
+  bool registerPreviewActionCallback(int configurationId, VoidCallback callback) {
     final callbacks = _onPreviewAction[configurationId];
     callbacks?.add(callback);
     return callbacks != null;

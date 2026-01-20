@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:super_context_menu/src/scaffold/common/deferred_menu_items.dart';
 
 // ignore: implementation_imports
-import 'package:super_native_extensions/src/drag_interaction/util.dart';
+import 'package:fork_super_native_extensions/src/drag_interaction/util.dart';
 
 import '../../menu_model.dart';
 import 'menu_layout.dart';

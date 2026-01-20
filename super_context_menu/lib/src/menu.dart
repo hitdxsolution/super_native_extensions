@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:super_native_extensions/raw_menu.dart' as raw;
+import 'package:fork_super_native_extensions/raw_menu.dart' as raw;
 
 import 'default_builder/desktop_menu_widget_builder.dart';
 import 'default_builder/mobile_menu_widget_builder.dart';
