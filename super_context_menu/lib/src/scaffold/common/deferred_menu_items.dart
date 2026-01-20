@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:super_native_extensions/raw_menu.dart' as raw;
+import 'package:fork_super_native_extensions/raw_menu.dart' as raw;
 
 import '../../menu_model.dart';
 
@@ -7,8 +7,7 @@ class DeferredMenuElementCache {
   final _cache = <int, List<MenuElement>>{};
 }
 
-mixin DeferredMenuItemsContainer<ChildType, WidgetType extends StatefulWidget>
-    on State<WidgetType> {
+mixin DeferredMenuItemsContainer<ChildType, WidgetType extends StatefulWidget> on State<WidgetType> {
   final _inProgressTokens = <raw.SimpleCancellationToken>[];
 
   late List<ChildType> resolvedChildren;
@@ -65,10 +64,8 @@ mixin DeferredMenuItemsContainer<ChildType, WidgetType extends StatefulWidget>
     _inProgressTokens.add(token);
   }
 
-  void _didLoadItemsForElement(
-      DeferredMenuElement element, List<MenuElement> items) {
-    final index =
-        resolvedChildren.indexWhere((e) => childHasMenuElement(e, element));
+  void _didLoadItemsForElement(DeferredMenuElement element, List<MenuElement> items) {
+    final index = resolvedChildren.indexWhere((e) => childHasMenuElement(e, element));
     if (index != -1) {
       setState(() {
         resolvedChildren.removeAt(index);

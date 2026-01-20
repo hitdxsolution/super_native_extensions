@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' show CircularProgressIndicator, Colors;
 import 'package:flutter/widgets.dart';
-import 'package:super_native_extensions/widget_snapshot.dart';
+import 'package:fork_super_native_extensions/widget_snapshot.dart';
 
 import 'menu_widget_builder.dart';
 
