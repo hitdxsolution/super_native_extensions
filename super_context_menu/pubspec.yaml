@@ -19,23 +19,6 @@ dependencies:
   device_info_plus: ">=10.0.1 <12.0.0"
   pixel_snap: ^0.1.1
 
-dependency_overrides:
-  super_native_extensions:
-    git:
-      url: https://github.com/hitdxsolution/super_native_extensions.git
-      path: super_native_extensions
-      ref: wedding-pro-3.16
-  super_clipboard:
-    git:
-      url: https://github.com/hitdxsolution/super_native_extensions.git
-      path: super_clipboard
-      ref: wedding-pro-3.16
-  super_context_menu:
-    git:
-      url: https://github.com/hitdxsolution/super_native_extensions.git
-      path: super_context_menu
-      ref: wedding-pro-3.16
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
