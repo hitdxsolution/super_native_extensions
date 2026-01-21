@@ -27,7 +27,8 @@ class _ContextMenuDetector extends StatefulWidget {
   final Widget child;
   final HitTestBehavior hitTestBehavior;
   final ContextMenuIsAllowed contextMenuIsAllowed;
-  final Future<void> Function(Offset, Listenable, Function(bool)) onShowContextMenu;
+  final Future<void> Function(Offset, Listenable, Function(bool))
+      onShowContextMenu;
 
   @override
   State<StatefulWidget> createState() => _ContextMenuDetectorState();
@@ -46,14 +47,17 @@ class _ContextMenuDetectorState extends State<_ContextMenuDetector> {
 
   bool _acceptPrimaryButton() {
     final keys = HardwareKeyboard.instance.logicalKeysPressed;
-    return defaultTargetPlatform == TargetPlatform.macOS && keys.length == 1 && keys.contains(LogicalKeyboardKey.controlLeft);
+    return defaultTargetPlatform == TargetPlatform.macOS &&
+        keys.length == 1 &&
+        keys.contains(LogicalKeyboardKey.controlLeft);
   }
 
   bool _canAcceptEvent(PointerDownEvent event) {
     if (event.kind != PointerDeviceKind.mouse) {
       return false;
     }
-    if (event.buttons == kSecondaryButton || event.buttons == kPrimaryButton && _acceptPrimaryButton()) {
+    if (event.buttons == kSecondaryButton ||
+        event.buttons == kPrimaryButton && _acceptPrimaryButton()) {
       return widget.contextMenuIsAllowed(event.position);
     }
 
@@ -90,36 +94,44 @@ class _ContextMenuDetectorState extends State<_ContextMenuDetector> {
     return Listener(
       behavior: widget.hitTestBehavior,
       onPointerDown: (event) {
+        if (_activeDetector != null) {
+          return;
+        }
+        if (!_canAcceptEvent(event)) {
+          return;
+        }
+
+        _activeDetector = this;
+
         _mutex.protect(() async {
-          if (_activeDetector != null) {
-            return;
-          }
-          if (_canAcceptEvent(event)) {
-            final menuResolvedCompleter = Completer<bool>();
-            _showContextMenu(event.position, _onPointerUp, (value) {
+          final menuResolvedCompleter = Completer<bool>();
+          _showContextMenu(
+            event.position,
+            _onPointerUp,
+            (value) {
               menuResolvedCompleter.complete(value);
-            }, () {
-              _mutex.protect(() async {
-                if (_activeDetector == this) {
-                  _activeDetector = null;
-                }
-              });
-            });
-            final menuResolved = await menuResolvedCompleter.future;
-            if (menuResolved) {
-              _activeDetector = this;
-              _pointerDown = event.pointer;
-              _pointerDownStopwatch = Stopwatch()..start();
-            }
+            },
+            () {
+              // onClose - 메뉴가 닫힐 때만 리셋
+              if (_activeDetector == this) {
+                _activeDetector = null;
+              }
+            },
+          );
+
+          final menuResolved = await menuResolvedCompleter.future;
+          if (menuResolved) {
+            _pointerDown = event.pointer;
+            _pointerDownStopwatch = Stopwatch()..start();
+          } else {
+            _activeDetector = null;
           }
         });
       },
       onPointerUp: (event) {
         if (_pointerDown == event.pointer) {
-          _activeDetector = null;
+          // ✅ _activeDetector = null; 제거!
           _pointerDown = null;
-          // Pointer up would trigger currently selected item. Make sure we don't
-          // do this on simple right click.
           if ((_pointerDownStopwatch?.elapsedMilliseconds ?? 0) > 300) {
             _onPointerUp.notify();
           }
@@ -157,7 +169,8 @@ class DesktopContextMenuWidget extends StatelessWidget {
   /// on platform.
   final IconThemeData? iconTheme;
 
-  final WritingToolsConfiguration? Function()? writingToolsConfigurationProvider;
+  final WritingToolsConfiguration? Function()?
+      writingToolsConfigurationProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +201,9 @@ class DesktopContextMenuWidget extends StatelessWidget {
     final mq = MediaQuery.of(context);
     final iconTheme = this.iconTheme ??
         const IconThemeData.fallback().copyWith(
-          color: mq.platformBrightness == Brightness.light ? const Color(0xFF090909) : const Color(0xFFF0F0F0),
+          color: mq.platformBrightness == Brightness.light
+              ? const Color(0xFF090909)
+              : const Color(0xFFF0F0F0),
         );
     return raw.MenuSerializationOptions(
       iconTheme: iconTheme,
@@ -234,15 +249,18 @@ class DesktopContextMenuWidget extends StatelessWidget {
         }
         onMenuResolved(true);
         onShowMenu.notify();
-        final writingToolsConfiguration = writingToolsConfigurationProvider?.call();
-        raw.writingToolsSuggestionCallback = writingToolsConfiguration?.onSuggestion;
+        final writingToolsConfiguration =
+            writingToolsConfigurationProvider?.call();
+        raw.writingToolsSuggestionCallback =
+            writingToolsConfiguration?.onSuggestion;
 
         final request = raw.DesktopContextMenuRequest(
             iconTheme: serializationOptions.iconTheme,
             position: globalPosition,
             menu: handle,
             writingToolsConfiguration: switch (writingToolsConfiguration) {
-              (WritingToolsConfiguration c) => raw.WritingToolsConfiguration(rect: c.rect, text: c.text),
+              (WritingToolsConfiguration c) =>
+                raw.WritingToolsConfiguration(rect: c.rect, text: c.text),
               _ => null,
             },
             fallback: () {
@@ -252,10 +270,7 @@ class DesktopContextMenuWidget extends StatelessWidget {
                 iconTheme: serializationOptions.iconTheme,
                 menu: handle!.menu,
                 menuWidgetBuilder: menuWidgetBuilder,
-                onDone: (value) {
-                  onDispose?.call();
-                  completer.complete(value);
-                },
+                onDone: (value) => completer.complete(value),
                 onInitialPointerUp: onInitialPointerUp,
                 position: globalPosition,
                 tapRegionGroupIds: tapRegionGroupIds,
