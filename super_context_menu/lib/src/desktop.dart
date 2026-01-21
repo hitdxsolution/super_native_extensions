@@ -130,7 +130,7 @@ class _ContextMenuDetectorState extends State<_ContextMenuDetector> {
       },
       onPointerUp: (event) {
         if (_pointerDown == event.pointer) {
-          // ✅ _activeDetector = null; 제거!
+          // NOTE _activeDetector = null; 제거!
           _pointerDown = null;
           if ((_pointerDownStopwatch?.elapsedMilliseconds ?? 0) > 300) {
             _onPointerUp.notify();
