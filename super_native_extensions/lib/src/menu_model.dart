@@ -145,9 +145,9 @@ class DeferredMenuElement extends MenuElement {
 }
 
 class MenuWidgetElement extends MenuElement {
-  MenuWidgetElement({required this.child});
+  MenuWidgetElement({required this.childBuilder});
 
-  final Widget child;
+  final Widget Function(VoidCallback focusOut) childBuilder;
 }
 
 class MenuResult {
