@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fork_super_native_extensions/raw_menu.dart';
 import 'package:pixel_snap/pixel_snap.dart';
 
 import '../../menu_model.dart';
@@ -77,9 +78,7 @@ class _ChildEntry {
   final innerKey = GlobalKey();
   final focusNode = FocusNode();
 
-  bool get focusable =>
-      element is Menu ||
-      (element is MenuAction && !(element as MenuAction).attributes.disabled);
+  bool get focusable => element is Menu || (element is MenuAction && !(element as MenuAction).attributes.disabled);
 
   void dispose() {
     focusNode.dispose();
@@ -92,9 +91,7 @@ class _ChildEntry {
   }
 }
 
-class MenuWidgetState extends State<MenuWidget>
-    with DeferredMenuItemsContainer<_ChildEntry, MenuWidget>
-    implements _ChildEntryDelegate, _MenuItemWidgetDelegate {
+class MenuWidgetState extends State<MenuWidget> with DeferredMenuItemsContainer<_ChildEntry, MenuWidget> implements _ChildEntryDelegate, _MenuItemWidgetDelegate {
   final _focusScope = FocusScopeNode();
   final _focusNode = FocusNode();
 
@@ -102,8 +99,7 @@ class MenuWidgetState extends State<MenuWidget>
   newChild(MenuElement e) => _ChildEntry(e, this);
 
   @override
-  bool childHasMenuElement(element, menuElement) =>
-      element.element == menuElement;
+  bool childHasMenuElement(element, menuElement) => element.element == menuElement;
 
   bool _pendingFocusApply = true;
 
@@ -155,23 +151,20 @@ class MenuWidgetState extends State<MenuWidget>
     // Focus has one frame latency. We know we'll be focused in one frame
     // so set focused to true immediately to prevent flicker.
     if (_pendingFocusApply) {
-      focused = widget.focusMode == MenuWidgetFocusMode.firstItem ||
-          widget.focusMode == MenuWidgetFocusMode.menu;
+      focused = widget.focusMode == MenuWidgetFocusMode.firstItem || widget.focusMode == MenuWidgetFocusMode.menu;
     } else {
       focused = _focusScope.hasFocus;
     }
     return DesktopMenuInfo(
       menu: widget.menu,
       parentMenu: widget.parentMenu,
-      resolvedChildren:
-          resolvedChildren.map((e) => e.element).toList(growable: false),
+      resolvedChildren: resolvedChildren.map((e) => e.element).toList(growable: false),
       iconTheme: widget.iconTheme,
       focused: focused,
     );
   }
 
-  Iterable<_ChildEntry> get _focusableChildEntries =>
-      resolvedChildren.where((e) => e.focusable);
+  Iterable<_ChildEntry> get _focusableChildEntries => resolvedChildren.where((e) => e.focusable);
 
   LogicalKeyboardKey getLeadingKey({
     required bool currentItemHasMenu,
@@ -203,8 +196,7 @@ class MenuWidgetState extends State<MenuWidget>
   }
 
   void onInitialPointerUp() {
-    final selectedEntry = resolvedChildren
-        .firstWhereOrNull((element) => element.focusNode.hasFocus);
+    final selectedEntry = resolvedChildren.firstWhereOrNull((element) => element.focusNode.hasFocus);
     if (selectedEntry != null) {
       _itemActivated(selectedEntry);
     } else {
@@ -222,9 +214,7 @@ class MenuWidgetState extends State<MenuWidget>
           return KeyEventResult.handled;
         }
         if (_focusScope.hasPrimaryFocus) {
-          if (e.logicalKey == LogicalKeyboardKey.arrowDown ||
-              e.logicalKey == LogicalKeyboardKey.arrowLeft ||
-              e.logicalKey == LogicalKeyboardKey.arrowRight) {
+          if (e.logicalKey == LogicalKeyboardKey.arrowDown || e.logicalKey == LogicalKeyboardKey.arrowLeft || e.logicalKey == LogicalKeyboardKey.arrowRight) {
             _focusableChildEntries.firstOrNull?.focusNode.requestFocus();
             return KeyEventResult.handled;
           } else if (e.logicalKey == LogicalKeyboardKey.arrowUp) {
@@ -233,12 +223,10 @@ class MenuWidgetState extends State<MenuWidget>
           }
         }
 
-        final selectedEntry = resolvedChildren
-            .firstWhereOrNull((element) => element.focusNode.hasFocus);
+        final selectedEntry = resolvedChildren.firstWhereOrNull((element) => element.focusNode.hasFocus);
         if (selectedEntry != null && selectedEntry.element is Menu) {
           final trailingKey = getTrailingKey();
-          if (e.logicalKey == trailingKey ||
-              e.logicalKey == LogicalKeyboardKey.enter) {
+          if (e.logicalKey == trailingKey || e.logicalKey == LogicalKeyboardKey.enter) {
             widget.delegate.pushMenu(
               parent: widget.menu,
               menu: selectedEntry.element as Menu,
@@ -249,8 +237,7 @@ class MenuWidgetState extends State<MenuWidget>
           }
         }
 
-        final leadingKey =
-            getLeadingKey(currentItemHasMenu: selectedEntry?.element is Menu);
+        final leadingKey = getLeadingKey(currentItemHasMenu: selectedEntry?.element is Menu);
 
         if (e.logicalKey == leadingKey) {
           if (widget.parentMenu != null) {
@@ -272,10 +259,8 @@ class MenuWidgetState extends State<MenuWidget>
       child: FocusTraversalGroup(
         child: Shortcuts(
           shortcuts: const {
-            SingleActivator(LogicalKeyboardKey.arrowUp):
-                DirectionalFocusIntent(TraversalDirection.up),
-            SingleActivator(LogicalKeyboardKey.arrowDown):
-                DirectionalFocusIntent(TraversalDirection.down),
+            SingleActivator(LogicalKeyboardKey.arrowUp): DirectionalFocusIntent(TraversalDirection.up),
+            SingleActivator(LogicalKeyboardKey.arrowDown): DirectionalFocusIntent(TraversalDirection.down),
           },
           child: SingleChildScrollView(
             controller: _scrollController,
@@ -291,13 +276,14 @@ class MenuWidgetState extends State<MenuWidget>
                         menuWidgetBuilder: widget.menuWidgetBuilder,
                         separator: item.element as MenuSeparator,
                       )
+                    else if (item.element is MenuWidgetElement)
+                      (item.element as MenuWidgetElement).child
                     else
                       MetaData(
                         metaData: MenuWidgetItemMetaData(
                           submenuRenderBox: () {
                             if (item.element is Menu) {
-                              return widget.delegate
-                                  .getMenuRenderBox(item.element as Menu);
+                              return widget.delegate.getMenuRenderBox(item.element as Menu);
                             } else {
                               return null;
                             }
@@ -336,8 +322,7 @@ class MenuWidgetState extends State<MenuWidget>
   bool _isSelected(_ChildEntry entry) {
     if (_pendingFocusApply) {
       // Prevent flicker - flutter focus has one frame latency.
-      return widget.focusMode == MenuWidgetFocusMode.firstItem &&
-          entry == resolvedChildren.firstOrNull;
+      return widget.focusMode == MenuWidgetFocusMode.firstItem && entry == resolvedChildren.firstOrNull;
     } else {
       return entry.focusNode.isSelected;
     }
@@ -511,7 +496,6 @@ extension on FocusNode {
       return true;
     }
     final focusedChild = nearestScope?.focusedChild;
-    return focusedChild != null &&
-        (focusedChild == this || focusedChild.ancestors.contains(this));
+    return focusedChild != null && (focusedChild == this || focusedChild.ancestors.contains(this));
   }
 }

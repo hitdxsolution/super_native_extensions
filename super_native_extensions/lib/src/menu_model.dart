@@ -144,6 +144,12 @@ class DeferredMenuElement extends MenuElement {
   final Future<List<MenuElement>> Function(CancellationToken) provider;
 }
 
+class MenuWidgetElement extends MenuElement {
+  MenuWidgetElement({required this.child});
+
+  final Widget child;
+}
+
 class MenuResult {
   MenuResult({
     required this.itemSelected,
