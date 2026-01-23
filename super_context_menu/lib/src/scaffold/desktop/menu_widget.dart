@@ -277,7 +277,7 @@ class MenuWidgetState extends State<MenuWidget> with DeferredMenuItemsContainer<
                         separator: item.element as MenuSeparator,
                       )
                     else if (item.element is MenuWidgetElement)
-                      (item.element as MenuWidgetElement).child
+                      (item.element as MenuWidgetElement).childBuilder(() => widget.delegate.hide(itemSelected: false))
                     else
                       MetaData(
                         metaData: MenuWidgetItemMetaData(
