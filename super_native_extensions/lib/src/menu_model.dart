@@ -128,6 +128,7 @@ class MenuAction extends MenuElement {
     super.image,
     super.titleStyle,
     super.prefixIcon,
+    super.tooltipMessage,
     required this.callback,
     this.attributes = const MenuActionAttributes(),
     this.state = MenuActionState.none,
