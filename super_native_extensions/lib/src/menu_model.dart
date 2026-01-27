@@ -40,6 +40,7 @@ class MenuElement {
     this.image,
     this.titleStyle,
     this.prefixIcon,
+    this.tooltipMessage,
   }) : uniqueId = _nextId++;
 
   final String? title;
@@ -47,6 +48,7 @@ class MenuElement {
   final MenuImage? image;
   final Widget? prefixIcon;
   final TextStyle? titleStyle;
+  final String? tooltipMessage;
   final int uniqueId;
 
   MenuElement? find({required int uniqueId}) {
